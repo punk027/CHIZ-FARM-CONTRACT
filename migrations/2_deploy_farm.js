@@ -1,8 +1,6 @@
 var fs = require('fs');
-
-var MasterChef = artifacts.require("../contracts/masterechef.sol");
+var MasterChef = artifacts.require("../contracts/masterchef.sol");
 var ChizToken = artifacts.require("../contracts/chiz.sol");
-
 const configs = require("../config.json");
 const contracts = require("../contracts.json");
 const ChizABI = require("../abi/ChizToken.json")
@@ -18,7 +16,6 @@ module.exports = async function(deployer) {
         const currentBlock = await web3.eth.getBlockNumber();
         const startBlock = configs.farm_param.startBlock
             || web3.utils.toBN(currentBlock).add(web3.utils.toBN(configs.farm_param.delay));
-
         await deployer.deploy(MasterChef, dataParse['NFTaddr1'], dataParse['NFTaddr2'], dataParse['ChizToken'], startBlock, configs.farm_param.devAddress, configs.farm_param.feeAddress, {
           gas: 5000000
         });
