@@ -1,0 +1,23 @@
+{
+    "owner": "0xfc4aa4A414C034E8c852A9E2fA967f82F7D52B90",
+    "mint": "20000000000000000000000000",
+    "lpExist": true,
+    "farm_param": {
+        "rewardPerBlock": "7710000000000000000",
+        "delay": 30,
+        "fund": "500000000000000000000000",
+        "devAddress": "0x6Ad4E4C3693349A3Aca5Ec22665788042B77B2e0",
+        "feeAddress": "0x6Ad4E4C3693349A3Aca5Ec22665788042B77B2e0",
+        "lp": [
+            {
+                "address": "0x2fb106f9751d643452f4c8a657ad408341824108",
+                "allocPoint":10000000000000000000,
+                "depositFeeBP":10,
+                "isPoolPrivileged": false
+            }
+            
+        ]
+    },
+    "ChizToken":"0xded7ceb95a1f3c20f07545dc50a8d2c093bbdf22",
+    "Presale": "0x0"
+}
