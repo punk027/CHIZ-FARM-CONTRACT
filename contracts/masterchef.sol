@@ -740,7 +740,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
         IERC20 lpToken;           // Address of LP token contract.
         uint256 allocPoint;       // How many allocation points assigned to this pool. CHIZes to distribute per block.
         uint256 lastRewardBlock;  // Last block number that CHIZes distribution occurs.
-        uint256 accChizPerShare;   // Accumulated CHIZes per share, times 1e18. See below.
+        uint256 accChizPerShare;   // Accumulated CHIZes per share, times 1e36. See below.
         uint16 depositFeeBP;      // Deposit fee in basis points
 	    uint256 lpSupply;
         bool isPoolPrivileged; 
@@ -855,9 +855,9 @@ contract MasterChef is Ownable, ReentrancyGuard {
             uint256 lastBlock = block.number < endBlock ? block.number : endBlock;
             uint256 multiplier = getMultiplier(pool.lastRewardBlock, lastBlock);
             uint256 chizReward = multiplier.mul(chizPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
-            accChizPerShare = accChizPerShare.add(chizReward.mul(1e18).div(pool.lpSupply));
+            accChizPerShare = accChizPerShare.add(chizReward.mul(1e36).div(pool.lpSupply));
         }
-        return user.amount.mul(accChizPerShare).div(1e18).sub(user.rewardDebt);
+        return user.amount.mul(accChizPerShare).div(1e36).sub(user.rewardDebt);
     }
 
     // Update reward variables for all pools. Be careful of gas spending!
@@ -886,7 +886,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
             chizToken.safeTransferFrom(address(this),devAddress,chizReward.div(50));
         }
 
-        pool.accChizPerShare = pool.accChizPerShare.add(chizReward.mul(1e18).div(pool.lpSupply));
+        pool.accChizPerShare = pool.accChizPerShare.add(chizReward.mul(1e36).div(pool.lpSupply));
         pool.lastRewardBlock = block.number;
     }
 
@@ -904,7 +904,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
 
         updatePool(_pid);
         if (user.amount > 0) {
-            uint256 pending = user.amount.mul(pool.accChizPerShare).div(1e18).sub(user.rewardDebt);
+            uint256 pending = user.amount.mul(pool.accChizPerShare).div(1e36).sub(user.rewardDebt);
             if (pending > 0) {
                 safeChizTransfer(msg.sender, pending);
             }
@@ -924,7 +924,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
 		        pool.lpSupply = pool.lpSupply.add(_amount);
             }
         }
-        user.rewardDebt = user.amount.mul(pool.accChizPerShare).div(1e18);
+        user.rewardDebt = user.amount.mul(pool.accChizPerShare).div(1e36);
         emit Deposit(msg.sender, _pid, _amount);
     }
 
@@ -934,7 +934,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
         UserInfo storage user = userInfo[_pid][msg.sender];
         require(user.amount >= _amount, "withdraw: not good");
         updatePool(_pid);
-        uint256 pending = user.amount.mul(pool.accChizPerShare).div(1e18).sub(user.rewardDebt);
+        uint256 pending = user.amount.mul(pool.accChizPerShare).div(1e36).sub(user.rewardDebt);
         if (pending > 0) {
             safeChizTransfer(msg.sender, pending);
         }
@@ -943,7 +943,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
             pool.lpToken.safeTransfer(address(msg.sender), _amount);
 	        pool.lpSupply = pool.lpSupply.sub(_amount);
         }
-        user.rewardDebt = user.amount.mul(pool.accChizPerShare).div(1e18);
+        user.rewardDebt = user.amount.mul(pool.accChizPerShare).div(1e36);
         emit Withdraw(msg.sender, _pid, _amount);
     }
 
