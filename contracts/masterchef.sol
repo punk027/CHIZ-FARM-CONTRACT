@@ -814,6 +814,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
     function add(uint256 _allocPoint, IERC20 _lpToken, uint16 _depositFeeBP, bool _isPoolPrivileged) external onlyOwner {
 	    _lpToken.balanceOf(address(this));
         require(_depositFeeBP <= 500, "add: invalid deposit fee basis points");
+
         uint256 lastRewardBlock = block.number > startBlock ? block.number : startBlock;
         totalAllocPoint = totalAllocPoint.add(_allocPoint);
         poolExistence[_lpToken] = true;
@@ -883,7 +884,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
         uint256 chizReward = multiplier.mul(chizPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
 
         if(chizDistributedAmount.add(chizReward.mul(102).div(100)) <= max_chiz_reward_amount){
-            chizToken.safeTransferFrom(address(this),devAddress,chizReward.div(50));
+            chizToken.safeTransfer(devAddress, chizReward.div(50));
         }
 
         pool.accChizPerShare = pool.accChizPerShare.add(chizReward.mul(1e36).div(pool.lpSupply));
@@ -894,14 +895,11 @@ contract MasterChef is Ownable, ReentrancyGuard {
     function deposit(uint256 _pid, uint256 _amount) nonReentrant external {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
-
         if(pool.isPoolPrivileged){
             // Privileged Pool NFT Check
             require(nftPrivilegeContractOne.balanceOf(msg.sender) > 0 && nftPrivilegeContractTwo.balanceOf(msg.sender) > 0, "NFTs are required for deposit");
 
         }
-        
-
         updatePool(_pid);
         if (user.amount > 0) {
             uint256 pending = user.amount.mul(pool.accChizPerShare).div(1e36).sub(user.rewardDebt);
