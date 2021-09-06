@@ -14,6 +14,12 @@
                 "allocPoint":100,
                 "depositFeeBP":10,
                 "isPoolPrivileged": false
+            },
+            {
+                "address": "0x2fb106f9751d643452f4c8a657ad408341824108",
+                "allocPoint":20,
+                "depositFeeBP":5,
+                "isPoolPrivileged": true
             }
             
         ]
